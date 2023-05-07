@@ -1,4 +1,4 @@
-package aiss.gitminer.model;
+package aiss.GitLabMiner.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

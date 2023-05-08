@@ -18,4 +18,11 @@ public class ProjectRepository {
     public List<Project> findAll() {
         return projects;
     }
+    public  Project create(Project project){
+        Project newProject = new Project(
+                UUID.randomUUID().toString(),
+                project.getName(),
+                project.getWebUrl());
+    return newProject;
+    }
 }

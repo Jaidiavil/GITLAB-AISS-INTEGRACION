@@ -30,12 +30,12 @@ public class Project {
         this.commits = new ArrayList<>();
         this.issues = new ArrayList<>();;
     }
-    public Project(String id, String name, String url, List<Commit> commits, List<Issue> issues) {
-        this.id=id;
+
+    public Project(String name, String url) {
         this.name = name;
         this.webUrl = url;
-        this.commits = new ArrayList<>(commits);
-        this.issues = new ArrayList<>(issues);;
+        this.commits = new ArrayList<>();
+        this.issues = new ArrayList<>();;
     }
 
     public String getId() {

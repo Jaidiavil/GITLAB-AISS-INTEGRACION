@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import aiss.GitLabMiner.model.*;
+import org.springframework.web.bind.annotation.GetMapping;
 
 public class ProjectRepository {
 
@@ -18,11 +19,14 @@ public class ProjectRepository {
     public List<Project> findAll() {
         return projects;
     }
+
     public  Project create(Project project){
         Project newProject = new Project(
                 UUID.randomUUID().toString(),
                 project.getName(),
                 project.getWebUrl());
+        projects.add(newProject);
     return newProject;
     }
+
 }

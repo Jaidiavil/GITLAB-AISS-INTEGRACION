@@ -18,11 +18,21 @@ public class ProjectRepository {
     public List<Project> findAll() {
         return projects;
     }
+    public  Project findOne(String id) {
+        return projects.stream().filter(project -> project.getId().equals(id)).findFirst().orElse(null);
+    }
     public  Project create(Project project){
         Project newProject = new Project(
                 UUID.randomUUID().toString(),
                 project.getName(),
                 project.getWebUrl());
+        projects.add(project);
     return newProject;
+    }
+    public void update(Project updatedProject, String id){
+        Project existing = findOne(id);
+        int i = projects.indexOf(existing);
+        updatedProject.setId(existing.getId());
+        projects.set(i, updatedProject);
     }
 }

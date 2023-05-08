@@ -14,4 +14,8 @@ public class ProjectRepository {
         projects.add(new Project(
         ));
     }
+
+    public List<Project> findAll() {
+        return projects;
+    }
 }

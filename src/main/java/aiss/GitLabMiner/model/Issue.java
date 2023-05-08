@@ -12,161 +12,132 @@ import java.util.List;
 
 
 public class Issue {
-
-
     private String id;
-
-
     private String refId;
-
     private String title;
-
     private String description;
-
     private String state;
-
-
     private String createdAt;
-
     private String updatedAt;
-
     private String closedAt;
-
     private List<String> labels;
-
     private User author;
-
     private User assignee;
-
     private Integer upvotes;
-
     private Integer downvotes;
-
-
     private String webUrl;
-
     private List<Comment> comments;
+
+    public Issue(String id, String refId, String title, String description, String state,
+                 String createdAt, String updatedAt, String closedAt, List<String> labels,
+                 User author, User assignee, Integer upvotes, Integer downvotes, String webUrl, List<Comment> comments) {
+        this.id = id;
+        this.refId = refId;
+        this.title = title;
+        this.description = description;
+        this.state = state;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.closedAt = closedAt;
+        this.labels = labels;
+        this.author = author;
+        this.assignee = assignee;
+        this.upvotes = upvotes;
+        this.downvotes = downvotes;
+        this.webUrl = webUrl;
+        this.comments = comments;
+    }
 
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
-
     public String getRefId() {
         return refId;
     }
-
     public void setRefId(String refId) {
         this.refId = refId;
     }
-
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
-
     public String getState() {
         return state;
     }
-
     public void setState(String state) {
         this.state = state;
     }
-
     public String getCreatedAt() {
         return createdAt;
     }
-
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
-
     public String getUpdatedAt() {
         return updatedAt;
     }
-
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
     }
-
     public String getClosedAt() {
         return closedAt;
     }
-
     public void setClosedAt(String closedAt) {
         this.closedAt = closedAt;
     }
-
     public List<String> getLabels() {
         return labels;
     }
-
     public void setLabels(List<String> labels) {
         this.labels = labels;
     }
-
     public User getAuthor() {
         return author;
     }
-
     public void setAuthor(User author) {
         this.author = author;
     }
-
     public User getAssignee() {
         return assignee;
     }
-
     public void setAssignee(User assignee) {
         this.assignee = assignee;
     }
-
     public Integer getUpvotes() {
         return upvotes;
     }
-
     public void setUpvotes(Integer upvotes) {
         this.upvotes = upvotes;
     }
-
     public Integer getDownvotes() {
         return downvotes;
     }
-
     public void setDownvotes(Integer downvotes) {
         this.downvotes = downvotes;
     }
-
     public String getWebUrl() {
         return webUrl;
     }
-
     public void setWebUrl(String webUrl) {
         this.webUrl = webUrl;
     }
-
     public List<Comment> getComments() {
         return comments;
     }
-
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

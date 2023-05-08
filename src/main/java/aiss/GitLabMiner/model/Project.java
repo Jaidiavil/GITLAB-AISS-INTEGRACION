@@ -13,22 +13,16 @@ import java.util.UUID;
 
 
 public class Project {
-
-
     public String id;
-
-
     public String name;
-
-
     public String webUrl;
-
     private List<Commit> commits;
-
-
     private List<Issue> issues;
 
-    //  public Project()
+    public Project() {
+        this.commits = new ArrayList<>();
+        this.issues = new ArrayList<>();;
+    }
     public Project(String id, String name, String url) {
         this.id=id;
         this.name = name;
@@ -36,9 +30,12 @@ public class Project {
         this.commits = new ArrayList<>();
         this.issues = new ArrayList<>();;
     }
-    public Project() {
-        commits = new ArrayList<>();
-        issues = new ArrayList<>();
+    public Project(String id, String name, String url, List<Commit> commits, List<Issue> issues) {
+        this.id=id;
+        this.name = name;
+        this.webUrl = url;
+        this.commits = new ArrayList<>(commits);
+        this.issues = new ArrayList<>(issues);;
     }
 
     public String getId() {

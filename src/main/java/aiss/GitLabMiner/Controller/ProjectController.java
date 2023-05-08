@@ -10,12 +10,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {
+    private final ProjectRepository repository;
 
-    private ProjectRepository repository;
-    public void ProjectRepository (ProjectRepository repository) {
+    public ProjectController(ProjectRepository repository) {
         this.repository = repository;
     }
 
+    //GET http://localhost:8080/api/projects
     @GetMapping
     public List<Project> findAll() {
         return repository.findAll();

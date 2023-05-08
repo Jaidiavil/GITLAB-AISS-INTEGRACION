@@ -9,40 +9,31 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "Commit")
+
 public class Commit {
 
-    @Id
-    @JsonProperty("id")
+
     private String id;
-    @JsonProperty("title")
+
     private String title;
 
-    @JsonProperty("message")
-    @Column(columnDefinition="TEXT")
+
     private String message;
-    @JsonProperty("author_name")
-    @NotEmpty(message = "Author name cannot be empty.")
+
     private String authorName;
-    @JsonProperty("author_email")
+
     private String authorEmail;
-    @JsonProperty("authored_date")
-    @NotEmpty(message = "Author date cannot be empty.")
+
     private String authoredDate;
-    @JsonProperty("committer_name")
-    @NotEmpty(message = "Committer name cannot be empty.")
+
     private String committerName;
-    @JsonProperty("committer_email")
+
     private String committerEmail;
 
-    @JsonProperty("committed_date")
-    @NotEmpty(message = "Committer date cannot be empty.")
+
     private String committedDate;
 
-    @JsonProperty("web_url")
-    @NotEmpty(message = "URL cannot be empty." +
-            "")
+
     private String webUrl;
 
     public String getId() {

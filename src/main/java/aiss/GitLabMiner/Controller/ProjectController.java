@@ -1,5 +1,6 @@
 package aiss.GitLabMiner.Controller;
 import aiss.GitLabMiner.model.Project;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import aiss.GitLabMiner.repository.ProjectRepository;
@@ -15,6 +16,7 @@ public class ProjectController {
         this.repository = repository;
     }
 
+    @GetMapping
     public List<Project> findAll() {
         return repository.findAll();
     }

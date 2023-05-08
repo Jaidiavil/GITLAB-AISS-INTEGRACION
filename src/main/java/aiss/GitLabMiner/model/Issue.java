@@ -10,53 +10,41 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Entity
-@Table(name = "Issue")
+
 public class Issue {
 
-    @Id
-    @JsonProperty("id")
+
     private String id;
 
-    @JsonProperty("ref_id")
+
     private String refId;
-    @JsonProperty("title")
+
     private String title;
-    @JsonProperty("description")
-    @Column(columnDefinition="TEXT")
+
     private String description;
-    @JsonProperty("state")
+
     private String state;
 
-    @JsonProperty("created_at")
+
     private String createdAt;
-    @JsonProperty("updated_at")
+
     private String updatedAt;
-    @JsonProperty("closed_at")
+
     private String closedAt;
-    @JsonProperty("labels")
-    @ElementCollection
+
     private List<String> labels;
-    @JsonProperty("author")
-    //@NotEmpty(message = "The author of the issue cannot be empty")
-    @JoinColumn(name = "author_id",referencedColumnName = "id")
-    @OneToOne(cascade=CascadeType.ALL)
+
     private User author;
-    @JsonProperty("assignee")
-    @JoinColumn(name = "assignee_id",referencedColumnName = "id")
-    @OneToOne(cascade=CascadeType.ALL)
+
     private User assignee;
-    @JsonProperty("upvotes")
+
     private Integer upvotes;
-    @JsonProperty("downvotes")
+
     private Integer downvotes;
 
-    @JsonProperty("web_url")
+
     private String webUrl;
 
-    @JsonProperty("comments")
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "issueId")
     private List<Comment> comments;
 
     public String getId() {

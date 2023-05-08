@@ -22,9 +22,11 @@ import java.util.List;
 public class ProjectController {
 
     private ProjectRepository repository;
-    public void ProjectRepository (ProjectRepository repository) {
+
+    public void ProjectRepository(ProjectRepository repository) {
         this.repository = repository;
     }
+
     @ResponseStatus(HttpStatus.ACCEPTED)
     @GetMapping
     public List<Project> findAll() {
@@ -34,7 +36,7 @@ public class ProjectController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Project create(@Valid @RequestBody Project project){
+    public Project create(@Valid @RequestBody Project project) {
         return repository.create(project);
     }
 
@@ -45,4 +47,9 @@ public class ProjectController {
         repository.update(updatedProject, id);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable String id) {
+        repository.delete(id);
+    }
 }

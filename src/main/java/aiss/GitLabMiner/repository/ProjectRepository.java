@@ -18,10 +18,16 @@ public class ProjectRepository {
     public List<Project> findAll() {
         return projects;
     }
-    public  Project findOne(String id) {
+
+    public Project findOne(String id) {
         return projects.stream().filter(project -> project.getId().equals(id)).findFirst().orElse(null);
     }
-    public  Project create(Project project){
+
+    public void delete(String id){
+        projects.removeIf(project -> project.getId().equals(id));
+    }
+
+    public Project create(Project project){
         Project newProject = new Project(
                 UUID.randomUUID().toString(),
                 project.getName(),

@@ -12,7 +12,20 @@ public class ProjectRepository {
 
     List<Project> projects = new ArrayList<>();
 
-    public ProjectRepository(){
+    //Creacion de datos de prueba temporales
+    public ProjectRepository() {
+        projects.add(new Project(
+                UUID.randomUUID().toString(),
+                "nombredeprueba1",
+                "urldeprueba1"
+
+        ));
+        projects.add(new Project(
+                UUID.randomUUID().toString(),
+                "nombredeprueba2",
+                "urldeprueba12"
+
+        ));
     }
 
     public List<Project> findAll() {
@@ -23,23 +36,27 @@ public class ProjectRepository {
         return projects.stream().filter(project -> project.getId().equals(id)).findFirst().orElse(null);
     }
 
-    public void delete(String id){
-        projects.removeIf(project -> project.getId().equals(id));
-    }
-
+    //Metodo para crear un nuevo proyecto
     public Project create(Project project){
         Project newProject = new Project(
                 UUID.randomUUID().toString(),
                 project.getName(),
                 project.getWebUrl());
-        projects.add(project);
+        projects.add(newProject);
         return newProject;
     }
+
+    //Metodo para actualizar un proyecto existente
     public void update(Project updatedProject, String id){
         Project existing = findOne(id);
         int i = projects.indexOf(existing);
         updatedProject.setId(existing.getId());
         projects.set(i, updatedProject);
+    }
+
+    //Metodo para actualizar un proyecto existente
+    public void delete(String id){
+        projects.removeIf(project -> project.getId().equals(id));
     }
 
 }

@@ -23,6 +23,12 @@ public class ProjectController {
         return repository.findAll();
     }
 
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @GetMapping("/{id}")
+    public Project findOne(String id){
+        return repository.findOne(id);
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Project create(@Valid @RequestBody Project project) {

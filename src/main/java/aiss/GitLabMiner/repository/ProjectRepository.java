@@ -8,7 +8,7 @@ import aiss.GitLabMiner.model.*;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ProjectRepository {
+public class ProjectRepository implements InterfaceRepository {
 
     List<Project> projects = new ArrayList<>();
 

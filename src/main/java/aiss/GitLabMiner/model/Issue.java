@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Issue {
     private String id;
-    private String refId;
+    private Integer refId;
     private String title;
     private String description;
     private String state;
@@ -32,7 +32,7 @@ public class Issue {
                  String createdAt, String updatedAt, String closedAt, List<String> labels,
                  User author, User assignee, Integer upvotes, Integer downvotes, String webUrl, List<Comment> comments) {
         this.id = id;
-        this.refId = refId;
+        this.refId = Integer.valueOf(refId);
         this.title = title;
         this.description = description;
         this.state = state;
@@ -54,11 +54,11 @@ public class Issue {
     public void setId(String id) {
         this.id = id;
     }
-    public String getRefId() {
+    public Integer getRefId() {
         return refId;
     }
     public void setRefId(String refId) {
-        this.refId = refId;
+        this.refId = Integer.valueOf(refId);
     }
     public String getTitle() {
         return title;

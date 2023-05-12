@@ -1,17 +1,17 @@
-package aiss.GitLabMiner.Controller;
+package aiss.GitLabMiner.controller;
 import aiss.GitLabMiner.model.Project;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import aiss.GitLabMiner.repository.ProjectRepository;
+import aiss.GitLabMiner.Service.GitLabService;
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {
-    private final ProjectRepository repository;
+    private final GitLabService repository;
 
-    public ProjectController(ProjectRepository repository) {
+    public ProjectController(GitLabService repository) {
         this.repository = repository;
     }
 
@@ -24,7 +24,7 @@ public class ProjectController {
     //GET http://localhost:8081/api/projects/{id}
     @GetMapping("/{id}")
     public Project findOne(@PathVariable String id){
-        return repository.findOne(id);
+        return repository.findId(id);
     }
 
     //Operacion de creacion
@@ -47,7 +47,7 @@ public class ProjectController {
     //DELETE http://localhost:8081/api/projects/{id}
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
-    public void delete(@RequestParam String id) {
+    public void delete(@RequestParam String id){
         repository.delete(id);
     }
 }

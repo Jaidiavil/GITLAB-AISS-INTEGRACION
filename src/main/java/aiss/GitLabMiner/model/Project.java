@@ -1,48 +1,43 @@
-
 package aiss.GitLabMiner.model;
 
-import aiss.GitLabMiner.repository.ProjectRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.naming.Name;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
+@Entity
+@Table(name = "projects")
 public class Project {
-    public String id;
-    public String name;
-    public String webUrl;
-    private List<Commit> commits;
-    private List<Issue> issues;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "web_url")
+    private String webUrl;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "project_id")
+    private List<Commit> commits = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "project_id")
+    private List<Issue> issues = new ArrayList<>();
 
     public Project() {
-        this.commits = new ArrayList<>();
-        this.issues = new ArrayList<>();;
-    }
-    public Project(String id, String name, String url) {
-        this.id=id;
-        this.name = name;
-        this.webUrl = url;
-        this.commits = new ArrayList<>();
-        this.issues = new ArrayList<>();;
     }
 
     public Project(String name, String url) {
         this.name = name;
         this.webUrl = url;
-        this.commits = new ArrayList<>();
-        this.issues = new ArrayList<>();;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -80,27 +75,12 @@ public class Project {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(Project.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("id");
-        sb.append('=');
-        sb.append(((this.id == null) ? "<null>" : this.id));
-        sb.append(',');
-        sb.append("commits");
-        sb.append('=');
-        sb.append(((this.commits == null) ? "<null>" : this.commits));
-        sb.append(',');
-        sb.append("issues");
-        sb.append('=');
-        sb.append(((this.issues == null) ? "<null>" : this.issues));
-        sb.append(',');
-
-        if (sb.charAt((sb.length() - 1)) == ',') {
-            sb.setCharAt((sb.length() - 1), ']');
-        } else {
-            sb.append(']');
-        }
-        return sb.toString();
+        return "Project{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", webUrl='" + webUrl + '\'' +
+                ", commits=" + commits +
+                ", issues=" + issues +
+                '}';
     }
-
 }

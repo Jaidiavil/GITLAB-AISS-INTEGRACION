@@ -1,30 +1,31 @@
 package aiss.GitLabMiner.controller;
 import aiss.GitLabMiner.model.Project;
+import aiss.GitLabMiner.service.GitLabService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import aiss.GitLabMiner.Service.GitLabService;
+
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {
-    private final GitLabService repository;
+    private final GitLabService service;
 
-    public ProjectController(GitLabService repository) {
-        this.repository = repository;
+    public ProjectController(GitLabService service) {
+        this.service = service;
     }
 
     //GET http://localhost:8081/api/projects
     @GetMapping
     public List<Project> findAll() {
-        return repository.findAll();
+        return service.getProjects();
     }
 
     //GET http://localhost:8081/api/projects/{id}
     @GetMapping("/{id}")
     public Project findOne(@PathVariable String id){
-        return repository.findId(id);
+        return service.getProjectById(id);
     }
 
     //Operacion de creacion
@@ -32,22 +33,6 @@ public class ProjectController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Project create(@Valid @RequestBody Project project) {
-        return repository.create(project);
-    }
-
-    //Operacion de actualizacion
-    //PUT http://localhost:8081/api/projects/{id}
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/{id}")
-    public void update(@PathVariable String id, @Valid @RequestBody Project updatedProject) {
-        repository.update(updatedProject, id);
-    }
-
-    //Operacion de eliminacion
-    //DELETE http://localhost:8081/api/projects/{id}
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping
-    public void delete(@RequestParam String id){
-        repository.delete(id);
+        return service.postProject(project);
     }
 }

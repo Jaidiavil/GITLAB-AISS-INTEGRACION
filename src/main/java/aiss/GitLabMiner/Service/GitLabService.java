@@ -1,92 +1,129 @@
-package aiss.GitLabMiner.Service;
+package aiss.GitLabMiner.service;
 
 import aiss.GitLabMiner.model.*;
-import aiss.GitLabMiner.model.Commit;
-import aiss.GitLabMiner.model.User;
-import aiss.GitLabMiner.model.Comment;
-import aiss.GitLabMiner.model.Issue;
-import aiss.GitLabMiner.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class GitLabService {
 
-    public final List<Project> projects = new ArrayList<Project>();
-
     @Autowired
     RestTemplate restTemplate;
 
-    public List<Project> findAll() {
-        List<Project> projects = null;
-        String uri = "https://gitlab.com/api/v4/projects/";
-        Project[] projectsSearch = restTemplate.getForObject(uri, Project[].class);
+    public List<User> getUsers(){
 
-        return Arrays.asList(projectsSearch);
+        String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
+        String url = "https://gitlab.com/api/v4/users";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<User[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, User[].class);
+        User[] users = response.getBody();
+
+        return Arrays.asList(users);
     }
 
-    public Project findId(String id) {
-        Project project = null;
-        String uri = "https://gitlab.com/api/v4/projects/" + id.toString();
-        Project projectSearch = restTemplate.getForObject(uri, Project.class);
-        project = projectSearch;
-        project.setCommits(findCommitsById(id));
-        System.out.println(project);
-        project.setIssues(findIssuesById(id));
+    public List<Comment> getCommentsByProjectIdAndIssueId(String id, String issueId){
+
+        String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
+        String url = "https://gitlab.com/api/v4/projects/" + id + "/issues/" + issueId + "/notes";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<Comment[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, Comment[].class);
+        Comment[] comments = response.getBody();
+
+        return Arrays.asList(comments);
+    }
+
+    public List<Commit> getCommitsByProjectId(String id){
+
+        String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
+        String url = "https://gitlab.com/api/v4/projects/" + id + "/repository/commits";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<Commit[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, Commit[].class);
+        Commit[] commits = response.getBody();
+
+        return Arrays.asList(commits);
+    }
+
+    public List<Issue> getIssuesByProjectId(String id){
+
+        String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
+        String url = "https://gitlab.com/api/v4/projects/" + id + "/issues";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<Issue[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, Issue[].class);
+        Issue[] issues = response.getBody();
+
+        return Arrays.asList(issues);
+    }
+
+    public List<Project> getProjects(){
+
+        String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
+        String url = "https://gitlab.com/api/v4/projects";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<Project[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, Project[].class);
+        Project[] projects = response.getBody();
+
+        return Arrays.asList(projects);
+    }
+
+    public Project getProjectById(String id){
+
+        String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
+        String url = "https://gitlab.com/api/v4/projects/" + id;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<Project> response = restTemplate.exchange(url, HttpMethod.GET, entity, Project.class);
+        Project project = response.getBody();
 
         return project;
     }
 
-    public List<Commit> findCommitsById(String id) {
-        List<Commit> commits = null;
-        String uri = "https://gitlab.com/api/v4/projects/" + id.toString() + "/repository/commits";
-        Commit[] commitSearch = restTemplate.getForObject(uri, Commit[].class);
+    public Project postProject(Project project){
 
-        return Arrays.asList(commitSearch);
-    }
+        String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
+        String url = "https://gitlab.com/api/v4/projects";
 
-    public List<Issue> findIssuesById(String id) {
-        List<Issue> issues = null;
-        String uri = "https://gitlab.com/api/v4/projects/" + id.toString() + "/issues";
-        Issue[] issuesSearch = restTemplate.getForObject(uri, Issue[].class);
-        for (Issue e : issuesSearch) {
-            e.setComments(findCommentByIid(id, e.getRefId().toString()));
-        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        return Arrays.asList(issuesSearch);
-    }
+        HttpEntity<Project> entity = new HttpEntity<>(project, headers);
+        ResponseEntity<Project> response = restTemplate.exchange(url, HttpMethod.POST, entity, Project.class);
+        Project createdProject = response.getBody();
 
-    public List<Comment> findCommentByIid(String id, String id2) {
-        List<Comment> issues = null;
-        String uri = "https://gitlab.com/api/v4/projects/" + id.toString() + "/issues/" + id2.toString() + "/notes";
-        Comment[] commentSearch = restTemplate.getForObject(uri, Comment[].class);
-        Comment[] comments = commentSearch;
-        return Arrays.asList(comments);
-    }
-
-    public Project create(Project project) {
-        String uri = "https://gitlab.com/api/v4/projects/";
-        Project projectSearch = restTemplate.postForObject(uri, project, Project.class);
-
-        return projectSearch;
-    }
-
-    public void update(Project updProject, String id) {
-        Project existing = findId(id);
-        int i = projects.indexOf(existing);
-        updProject.setId(existing.getId());
-        projects.set(i, updProject);
-    }
-
-    public void delete(String id) {
-        projects.removeIf(project -> project.getId().equals(id));
+        return createdProject;
     }
 }
-
-
-

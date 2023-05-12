@@ -8,36 +8,52 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
-@Table(name = "projects")
 public class Project {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "web_url")
-    private String webUrl;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "project_id")
-    private List<Commit> commits = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "project_id")
-    private List<Issue> issues = new ArrayList<>();
+
+    @JsonProperty("id")
+    public String id;
+
+    @JsonProperty("name")
+    @NotEmpty(message = "The name of the project cannot be empty")
+    public String name;
+
+    @JsonProperty("web_url")
+    @NotEmpty(message = "The URL of the project cannot be empty")
+    public String webUrl;
+    @JsonProperty("commits")
+    private List<Commit> commits;
+
+    @JsonProperty("issues")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "projectId")
+    private List<Issue> issues;
 
     public Project() {
+        commits = new ArrayList<>();
+        issues = new ArrayList<>();
     }
 
-    public Project(String name, String url) {
+    public Project(String id, String name, String web_url) {
+        this.id = id;
         this.name = name;
-        this.webUrl = url;
+        this.webUrl = web_url;
+        this.commits = new ArrayList<>();
+        this.issues = new ArrayList<>();
     }
 
-    public Long getId() {
+    public Project(String id, String name, String web_url, List<Commit> commits, List<Issue> issues) {
+        this.id = id;
+        this.name = name;
+        this.webUrl = web_url;
+        this.commits = new ArrayList<>(commits);
+        this.issues = new ArrayList<>(issues);
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -1,4 +1,4 @@
-package aiss.GitLabMiner.Controller;
+package aiss.GitLabMiner.controller;
 import aiss.GitLabMiner.model.Project;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

@@ -2,8 +2,10 @@
 package aiss.GitLabMiner.model;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Comment {
-    @Id
+    @JsonProperty("id")
     private String id;
     @JsonProperty("body")
     private String body;

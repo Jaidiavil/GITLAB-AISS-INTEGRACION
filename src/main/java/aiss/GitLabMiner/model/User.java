@@ -1,7 +1,10 @@
 
 package aiss.GitLabMiner.model;
 
-// Watch out: User is a reserved keyword in H2
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
       @JsonProperty("id")
       private String id;

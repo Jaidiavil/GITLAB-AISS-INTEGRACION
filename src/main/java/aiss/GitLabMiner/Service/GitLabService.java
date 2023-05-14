@@ -1,4 +1,4 @@
-package aiss.GitLabMiner.service;
+package aiss.GitLabMiner.Service;
 
 import aiss.GitLabMiner.model.*;
 import org.springframework.beans.factory.annotation.Autowired;

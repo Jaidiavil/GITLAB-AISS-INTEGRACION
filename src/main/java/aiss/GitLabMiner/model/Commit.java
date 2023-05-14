@@ -9,7 +9,6 @@ public class Commit {
     private String id;
     @JsonProperty("title")
     private String title;
-
     @JsonProperty("message")
     private String message;
     @JsonProperty("author_name")

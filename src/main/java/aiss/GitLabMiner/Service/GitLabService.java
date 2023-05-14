@@ -1,4 +1,4 @@
-package aiss.GitLabMiner.Service;
+package aiss.GitLabMiner.service;
 
 import aiss.GitLabMiner.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,6 +6,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class GitLabService {
     @Autowired
     RestTemplate restTemplate;
 
-    public List<User> getUsers(){
+    public List<User> findUsers(){
 
         String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
         String url = "https://gitlab.com/api/v4/users";
@@ -31,7 +32,7 @@ public class GitLabService {
         return Arrays.asList(users);
     }
 
-    public List<Comment> getCommentsByProjectIdAndIssueId(String id, String issueId){
+    public List<Comment> findCommentsByProjectIdAndIssueId(String id, String issueId){
 
         String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
         String url = "https://gitlab.com/api/v4/projects/" + id + "/issues/" + issueId + "/notes";
@@ -47,7 +48,7 @@ public class GitLabService {
         return Arrays.asList(comments);
     }
 
-    public List<Commit> getCommitsByProjectId(String id){
+    public List<Commit> findCommitsByProjectId(String id){
 
         String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
         String url = "https://gitlab.com/api/v4/projects/" + id + "/repository/commits";
@@ -63,7 +64,7 @@ public class GitLabService {
         return Arrays.asList(commits);
     }
 
-    public List<Issue> getIssuesByProjectId(String id){
+    public List<Issue> findIssuesByProjectId(String id){
 
         String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
         String url = "https://gitlab.com/api/v4/projects/" + id + "/issues";
@@ -79,7 +80,7 @@ public class GitLabService {
         return Arrays.asList(issues);
     }
 
-    public List<Project> getProjects(){
+    public List<Project> findAllProjects(){
 
         String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
         String url = "https://gitlab.com/api/v4/projects";
@@ -95,7 +96,7 @@ public class GitLabService {
         return Arrays.asList(projects);
     }
 
-    public Project getProjectById(String id){
+    public Project findProjectById(String id){
 
         String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
         String url = "https://gitlab.com/api/v4/projects/" + id;
@@ -111,19 +112,67 @@ public class GitLabService {
         return project;
     }
 
-    public Project postProject(Project project){
+    public Project getProject(String id){
 
-        String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
-        String url = "https://gitlab.com/api/v4/projects";
+        String uri = "https://gitlab.com/api/v4/projects/" + id;
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        Project dataProject = findProjectById(id);
+        Project project = new Project(dataProject.getId().toString(), dataProject.getName(), dataProject.getWebUrl());
 
-        HttpEntity<Project> entity = new HttpEntity<>(project, headers);
-        ResponseEntity<Project> response = restTemplate.exchange(url, HttpMethod.POST, entity, Project.class);
-        Project createdProject = response.getBody();
+        List<Commit> dataCommit = findCommitsByProjectId(project.getId());
+        List<Commit> commits = new ArrayList<>();
+        for (Commit commit: dataCommit) {
+            Commit newCommit = new Commit(
+                    commit.getId(),
+                    commit.getTitle(),
+                    commit.getMessage(),
+                    commit.getAuthorName(),
+                    commit.getAuthorEmail(),
+                    commit.getAuthoredDate(),
+                    commit.getCommitterName(),
+                    commit.getCommitterEmail(),
+                    commit.getCommittedDate(),
+                    commit.getWebUrl()
+            );
+            commits.add(newCommit);
+        }
+        project.setCommits(commits);
 
-        return createdProject;
+        List<Issue> dataIssue = findIssuesByProjectId(project.getId());
+        List<Issue> issues = new ArrayList<>();
+        for (Issue issue: dataIssue) {
+            Issue newIssue = new Issue(
+                    issue.getId(),
+                    issue.getRefId(),
+                    issue.getTitle(),
+                    issue.getDescription(),
+                    issue.getState(),
+                    issue.getCreatedAt(),
+                    issue.getUpdatedAt(),
+                    issue.getClosedAt(),
+                    issue.getLabels(),
+                    issue.getAuthor(),
+                    issue.getAssignee(),
+                    issue.getUpvotes(),
+                    issue.getDownvotes(),
+                    issue.getWebUrl());
+
+            List<Comment> dataComment = findCommentsByProjectIdAndIssueId(project.getId(), newIssue.getRefId());
+            List<Comment> comments = new ArrayList<>();
+            for (Comment comment: dataComment) {
+                Comment newComment = new Comment(
+                        comment.getId(),
+                        comment.getBody(),
+                        comment.getAuthor(),
+                        comment.getCreatedAt(),
+                        comment.getUpdatedAt()
+                );
+                comments.add(newComment);
+            }
+            newIssue.setComments(comments);
+            issues.add(newIssue);
+        }
+        project.setIssues(issues);
+        return project;
     }
 }

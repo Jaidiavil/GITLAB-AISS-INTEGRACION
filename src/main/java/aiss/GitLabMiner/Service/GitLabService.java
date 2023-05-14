@@ -1,4 +1,4 @@
-package aiss.GitLabMiner.service;
+package aiss.GitLabMiner.Service;
 
 import aiss.GitLabMiner.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +97,7 @@ public class GitLabService {
 
     public Project getProjectById(String id){
 
-        String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
+        String token = "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";
         String url = "https://gitlab.com/api/v4/projects/" + id;
 
         HttpHeaders headers = new HttpHeaders();
@@ -113,7 +113,7 @@ public class GitLabService {
 
     public Project postProject(Project project){
 
-        String token = "glpat-3Ty1dCruj56ssUWEWdwJ";
+        String token = "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";
         String url = "https://gitlab.com/api/v4/projects";
 
         HttpHeaders headers = new HttpHeaders();

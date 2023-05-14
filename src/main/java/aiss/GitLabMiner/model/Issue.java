@@ -12,27 +12,43 @@ import java.util.List;
 
 
 public class Issue {
+
+    @JsonProperty("id")
     private String id;
-    private Integer refId;
+    @JsonProperty("ref_id")
+    private String refId;
+    @JsonProperty("title")
     private String title;
+    @JsonProperty("description")
     private String description;
+    @JsonProperty("state")
     private String state;
+    @JsonProperty("created_at")
     private String createdAt;
+    @JsonProperty("updated_at")
     private String updatedAt;
+    @JsonProperty("closed_at")
     private String closedAt;
+    @JsonProperty("labels")
     private List<String> labels;
+    @JsonProperty("author")
     private User author;
+    @JsonProperty("assignee")
     private User assignee;
+    @JsonProperty("upvotes")
     private Integer upvotes;
+    @JsonProperty("downvotes")
     private Integer downvotes;
+    @JsonProperty("web_url")
     private String webUrl;
+    @JsonProperty("comments")
     private List<Comment> comments;
 
     public Issue(String id, String refId, String title, String description, String state,
                  String createdAt, String updatedAt, String closedAt, List<String> labels,
                  User author, User assignee, Integer upvotes, Integer downvotes, String webUrl, List<Comment> comments) {
         this.id = id;
-        this.refId = Integer.valueOf(refId);
+        this.refId = refId;
         this.title = title;
         this.description = description;
         this.state = state;
@@ -54,11 +70,11 @@ public class Issue {
     public void setId(String id) {
         this.id = id;
     }
-    public Integer getRefId() {
+    public String getRefId() {
         return refId;
     }
     public void setRefId(String refId) {
-        this.refId = Integer.valueOf(refId);
+        this.refId = refId;
     }
     public String getTitle() {
         return title;

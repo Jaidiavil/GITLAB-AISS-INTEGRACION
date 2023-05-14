@@ -12,10 +12,17 @@ import java.util.ArrayList;
 
 
 public class Comment {
+    @Id
     private String id;
+    @JsonProperty("body")
     private String body;
+
+    @JsonProperty("author")
     private User author;
+
+    @JsonProperty("created_at")
     private String createdAt;
+    @JsonProperty("updated_at")
     private String updatedAt;
     public Comment(String id, String body, User author, String createdAt, String updatedAt) {
         this.id=id;

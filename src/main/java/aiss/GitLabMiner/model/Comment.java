@@ -1,21 +1,19 @@
 
 package aiss.GitLabMiner.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.annotation.Generated;
-import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-
 
 public class Comment {
+    @Id
     private String id;
+    @JsonProperty("body")
     private String body;
+
+    @JsonProperty("author")
     private User author;
+
+    @JsonProperty("created_at")
     private String createdAt;
+    @JsonProperty("updated_at")
     private String updatedAt;
     public Comment(String id, String body, User author, String createdAt, String updatedAt) {
         this.id=id;

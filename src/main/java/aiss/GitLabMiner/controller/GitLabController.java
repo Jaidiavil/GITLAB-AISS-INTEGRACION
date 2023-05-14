@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import aiss.GitLabMiner.Service.GitLabService;
+import aiss.GitLabMiner.service.GitLabService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,10 +29,10 @@ public class GitLabController {
     //GET http://localhost:8081/gitlabminer/{id}
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{id}")
-    public Project create(@PathVariable String id) {
+    public Project create(@PathVariable String id, @RequestParam Integer maxPages) {
         String url = "http://localhost:8080/gitminer/projects";
 
-        Project project = gitLabService.getProject(id);
+        Project project = gitLabService.createProject(id, maxPages);
         Project createdProject = new Project(project.getId(), project.getName(), project.getWebUrl(), project.getCommits(), project.getIssues());
         Project result = restTemplate.postForObject(url, createdProject, Project.class);
         return result;
@@ -40,8 +40,8 @@ public class GitLabController {
 
     //GET http://localhost:8081/gitlabminer/{id}
     @GetMapping("/{id}")
-    public Project findProject(@PathVariable String id) {
-        Project project = gitLabService.getProject(id);
+    public Project findProject(@PathVariable String id, @RequestParam Integer maxPages) {
+        Project project = gitLabService.createProject(id, maxPages);
         List<Commit> commits = project.getCommits();
         List<Issue> issues = project.getIssues();
         Project filtredProject = new Project(project.getId(), project.getName(), project.getWebUrl(), commits, issues);

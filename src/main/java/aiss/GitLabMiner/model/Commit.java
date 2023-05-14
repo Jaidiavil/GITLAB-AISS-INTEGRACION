@@ -1,6 +1,9 @@
 package aiss.GitLabMiner.model;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.data.annotation.Id;
+
 public class Commit {
 
     @Id

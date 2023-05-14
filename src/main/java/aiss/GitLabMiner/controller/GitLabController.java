@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import aiss.GitLabMiner.service.GitLabService;
+import aiss.GitLabMiner.Service.GitLabService;
 
 import javax.validation.Valid;
 import java.util.List;

@@ -30,6 +30,7 @@ public class Commit {
 
     @JsonProperty("web_url")
     private String webUrl;
+    public Commit(){}
 
     public Commit(String id, String title, String message, String authorName,
                   String authorEmail, String authoredDate, String committerName,

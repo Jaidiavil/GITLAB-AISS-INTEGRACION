@@ -39,6 +39,7 @@ public class Issue {
     private String webUrl;
     @JsonProperty("comments")
     private List<Comment> comments;
+    public Issue(){}
 
     public Issue(String id, String refId, String title, String description, String state,
                  String createdAt, String updatedAt, String closedAt, List<String> labels,

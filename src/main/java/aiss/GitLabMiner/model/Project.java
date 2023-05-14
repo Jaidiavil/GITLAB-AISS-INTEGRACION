@@ -21,6 +21,7 @@ public class Project {
     @JsonProperty("issues")
     private List<Issue> issues;
 
+
     public Project() {
         commits = new ArrayList<>();
         issues = new ArrayList<>();

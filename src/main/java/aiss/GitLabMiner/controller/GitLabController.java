@@ -1,4 +1,5 @@
 package aiss.GitLabMiner.controller;
+import aiss.GitLabMiner.model.Comment;
 import aiss.GitLabMiner.model.Commit;
 import aiss.GitLabMiner.model.Issue;
 import aiss.GitLabMiner.model.Project;
@@ -12,6 +13,8 @@ import org.springframework.web.client.RestTemplate;
 import aiss.GitLabMiner.service.GitLabService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -24,28 +27,30 @@ public class GitLabController {
     @Autowired
     GitLabService gitLabService;
 
-    final String gitMinerUrl = "http://localhost:8080/gitminer";
 
-    //GET http://localhost:8081/gitlabminer/{id}
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{id}")
-    public Project create(@PathVariable String id, @RequestParam Integer maxPages) {
-        String url = "http://localhost:8080/gitminer/projects";
+    public Project create(@PathVariable String id,
+                          @RequestParam(defaultValue = "20") Integer sinceIssues,
+                          @RequestParam(defaultValue = "2") Integer sinceCommits,
+                          @RequestParam(defaultValue = "2") Integer maxPages) {
 
-        Project project = gitLabService.createProject(id, maxPages);
-        Project createdProject = new Project(project.getId(), project.getName(), project.getWebUrl(), project.getCommits(), project.getIssues());
-        Project result = restTemplate.postForObject(url, createdProject, Project.class);
-        return result;
-    }
+        Project project = gitLabService.getProject(id);
 
-    //GET http://localhost:8081/gitlabminer/{id}
-    @GetMapping("/{id}")
-    public Project findProject(@PathVariable String id, @RequestParam Integer maxPages) {
-        Project project = gitLabService.createProject(id, maxPages);
-        List<Commit> commits = project.getCommits();
-        List<Issue> issues = project.getIssues();
-        Project filtredProject = new Project(project.getId(), project.getName(), project.getWebUrl(), commits, issues);
-        return filtredProject;
+        List<Commit> commits = gitLabService.getCommits(id, sinceCommits, maxPages);
+        project.setCommits(commits);
+
+        List<Issue> issues = gitLabService.getIssues(id, sinceIssues, maxPages);
+        project.setIssues(issues);
+
+        for (Issue i: issues){
+            List<Comment> comments = gitLabService.getIssueComments(id,i.getRefId(),maxPages);
+            i.setComments(comments);
+        }
+
+        gitLabService.postProject(project);
+
+        return project;
     }
 
 }

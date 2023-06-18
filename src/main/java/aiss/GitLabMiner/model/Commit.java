@@ -30,22 +30,6 @@ public class Commit {
 
     @JsonProperty("web_url")
     private String webUrl;
-    public Commit(){}
-
-    public Commit(String id, String title, String message, String authorName,
-                  String authorEmail, String authoredDate, String committerName,
-                  String committerEmail, String committedDate, String webUrl) {
-        this.id = id;
-        this.title = title;
-        this.message = message;
-        this.authorName = authorName;
-        this.authorEmail = authorEmail;
-        this.authoredDate = authoredDate;
-        this.committerName = committerName;
-        this.committerEmail = committerEmail;
-        this.committedDate = committedDate;
-        this.webUrl = webUrl;
-    }
 
     public String getId() {
         return id;

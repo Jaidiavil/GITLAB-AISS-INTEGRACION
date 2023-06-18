@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping("/gitlabminer")
+@RequestMapping("/gitlab")
 public class GitLabController {
 
     @Autowired
@@ -27,30 +27,30 @@ public class GitLabController {
     @Autowired
     GitLabService gitLabService;
 
+    @GetMapping
+    public List<Project> findAll(){
+        return gitLabService.getProjects();
+    }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{id}")
-    public Project create(@PathVariable String id,
-                          @RequestParam(defaultValue = "20") Integer sinceIssues,
-                          @RequestParam(defaultValue = "2") Integer sinceCommits,
-                          @RequestParam(defaultValue = "2") Integer maxPages) {
+    @GetMapping("/{id}")
+    public Project findOne(@PathVariable String id,
+                           @RequestParam(defaultValue = "2") Integer sinceCommits,
+                           @RequestParam(defaultValue = "20") Integer sinceIssues,
+                           @RequestParam(defaultValue = "2") Integer maxPages) {
 
-        Project project = gitLabService.getProject(id);
-
-        List<Commit> commits = gitLabService.getCommits(id, sinceCommits, maxPages);
-        project.setCommits(commits);
-
-        List<Issue> issues = gitLabService.getIssues(id, sinceIssues, maxPages);
-        project.setIssues(issues);
-
-        for (Issue i: issues){
-            List<Comment> comments = gitLabService.getIssueComments(id,i.getRefId(),maxPages);
-            i.setComments(comments);
-        }
-
-        gitLabService.postProject(project);
-
+        Project project = gitLabService.getProject(id,sinceCommits,sinceIssues,maxPages);
         return project;
+    }
+
+    @PostMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Project createProject(@PathVariable @Valid String id,
+                                 @RequestParam(defaultValue = "2") Integer sinceCommits,
+                                 @RequestParam(defaultValue = "20") Integer sinceIssues,
+                                 @RequestParam(defaultValue = "2") Integer maxPages) {
+
+        Project project = gitLabService.getProject(id,sinceCommits,sinceIssues,maxPages);
+        return gitLabService.postProject(project);
     }
 
 }

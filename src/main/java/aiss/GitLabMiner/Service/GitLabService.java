@@ -17,52 +17,31 @@ public class GitLabService {
 
     @Autowired
     RestTemplate restTemplate;
-    public GitLabService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
     private final String url_post = "http://localhost:8080/gitminer/projects";
     private final String token = "glpat-cbavaBZ6sJznUq8CP-oF";
 
-    public List<Comment> getIssueComments(String id, String issueId, Integer maxPages){
+    public List<Comment> getIssueComments(String id, String ref_id, Integer maxPages){
+
+        String uri = "https://gitlab.com/api/v4/projects/" + id + "/issues/" + ref_id + "/notes?per_page=" + maxPages;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        List<Comment> comments = new ArrayList<>();
+        HttpEntity<Comment> entity = new HttpEntity<Comment>(null, headers);
+        ResponseEntity<Comment[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, Comment[].class);
+        Comment[] comments = response.getBody();
 
-        for (int i = 1; i<=maxPages; i++) {
-
-            String url = "https://gitlab.com/api/v4/projects/" + id + "/issues/" + issueId + "/notes?page=" + i;
-
-            HttpEntity<String> entity = new HttpEntity<>(url,headers);
-            ResponseEntity<Comment[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, Comment[].class);
-
-            comments.addAll(new ArrayList<>(Arrays.asList(response.getBody())));
-        }
-
-        return comments;
+        return Arrays.asList(comments);
     }
 
     public List<Commit> getCommits(String id, Integer sinceCommits, Integer maxPages) {
 
         String fecha = LocalDate.now().minusDays(sinceCommits).toString();
+        String uri = "https://gitlab.com/api/v4/projects/" + id + "/repository/commits?since=" + fecha +"&per_page=" + maxPages;
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        List<Commit> commits = new ArrayList<>();
-
-        for (int i = 1; i<=maxPages; i++) {
-
-            String url = "https://gitlab.com/api/v4/projects/" + id + "/repository/commits?since=" + fecha + "&page=" + i;
-
-            HttpEntity<String> entity = new HttpEntity<>(url,headers);
-            ResponseEntity<Commit[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, Commit[].class);
-
-            commits.addAll(new ArrayList<>(Arrays.asList(response.getBody())));
-        }
+        Commit[] response = restTemplate.getForObject(uri, Commit[].class);
+        List<Commit> commits= Arrays.asList(response);
 
         return commits;
     }
@@ -70,27 +49,20 @@ public class GitLabService {
     public List<Issue> getIssues(String id, Integer sinceIssues, Integer maxPages) {
 
         String fecha = LocalDate.now().minusDays(sinceIssues).toString();
+        String uri = "https://gitlab.com/api/v4/projects/" + id + "/issues?updated_before="+fecha+"&per_page=" + maxPages;
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        Issue[] response = restTemplate.getForObject(uri, Issue[].class);
 
-        List<Issue> issues = new ArrayList<>();
+        for(Issue i: response){
 
-        for (int i = 1; i<=maxPages; i++) {
-
-            String url = "https://gitlab.com/api/v4/projects/" + id + "/issues?updated_after=" + fecha + "&page=" + i;
-
-            HttpEntity<String> entity = new HttpEntity<>(url,headers);
-            ResponseEntity<Issue[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, Issue[].class);
-
-            issues.addAll(new ArrayList<>(Arrays.asList(response.getBody())));
+            i.setComments(getIssueComments(id,i.getRefId(),maxPages));
 
         }
-        return issues;
+
+        return Arrays.asList(response);
     }
 
-    public Project getProject (String id){
+    public Project getProject(String id, Integer sinceCommits,Integer sinceIssues,Integer maxPages){
 
         String url = "https://gitlab.com/api/v4/projects/" + id;
 
@@ -100,14 +72,25 @@ public class GitLabService {
 
         HttpEntity<String> entity = new HttpEntity<>(url,headers);
         ResponseEntity<Project> response = restTemplate.exchange(url, HttpMethod.GET, entity, Project.class);
+
         Project project = response.getBody();
+        project.setCommits(getCommits(id,sinceCommits,maxPages));
+        project.setIssues(getIssues(id,sinceIssues,maxPages));
 
         return project;
     }
 
-    public void postProject(Project project) {
-        RestTemplate restTemplate = new RestTemplate();
+    public List<Project> getProjects(){
+        String uri = "https://gitlab.com/api/v4/projects/";
+        Project[] response = restTemplate.getForObject(uri, Project[].class);
+
+        return Arrays.asList(response);
+    }
+
+    public Project postProject(Project project) {
         String url = url_post;
-        restTemplate.postForObject(url, project, Project.class);
+        Project response = restTemplate.postForObject(url, project, Project.class);
+
+        return response;
     }
 }

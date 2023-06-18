@@ -16,15 +16,6 @@ public class User {
       private String avatarUrl;
       @JsonProperty("web_url")
       private String webUrl;
-      public User(){}
-
-      public User(String id, String username, String name, String avatarUrl, String webUrl) {
-          this.id=id;
-          this.username = username;
-          this.name = name;
-          this.avatarUrl = avatarUrl;
-          this.webUrl = webUrl;
-      }
 
     public String getId() {
         return id;

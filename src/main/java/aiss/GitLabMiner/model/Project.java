@@ -21,28 +21,6 @@ public class Project {
     @JsonProperty("issues")
     private List<Issue> issues;
 
-
-    public Project() {
-        commits = new ArrayList<>();
-        issues = new ArrayList<>();
-    }
-
-    public Project(String id, String name, String web_url) {
-        this.id = id;
-        this.name = name;
-        this.webUrl = web_url;
-        this.commits = new ArrayList<>();
-        this.issues = new ArrayList<>();
-    }
-
-    public Project(String id, String name, String web_url, List<Commit> commits, List<Issue> issues) {
-        this.id = id;
-        this.name = name;
-        this.webUrl = web_url;
-        this.commits = new ArrayList<>(commits);
-        this.issues = new ArrayList<>(issues);
-    }
-
     public String getId() {
         return id;
     }

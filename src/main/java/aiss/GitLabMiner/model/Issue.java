@@ -11,8 +11,8 @@ public class Issue {
 
     @JsonProperty("id")
     private String id;
-    @JsonProperty("ref_id")
-    private String refId;
+    @JsonProperty("iid")
+    private String iid;
     @JsonProperty("title")
     private String title;
     @JsonProperty("description")
@@ -46,11 +46,11 @@ public class Issue {
     public void setId(String id) {
         this.id = id;
     }
-    public String getRefId() {
-        return refId;
+    public String getIid() {
+        return iid;
     }
-    public void setRefId(String refId) {
-        this.refId = refId;
+    public void setIid(String iid) {
+        this.iid = iid;
     }
     public String getTitle() {
         return title;
@@ -140,7 +140,7 @@ public class Issue {
         sb.append(',');
         sb.append("refId");
         sb.append('=');
-        sb.append(((this.refId == null) ? "<null>" : this.refId));
+        sb.append(((this.iid == null) ? "<null>" : this.iid));
         sb.append(',');
         sb.append("title");
         sb.append('=');

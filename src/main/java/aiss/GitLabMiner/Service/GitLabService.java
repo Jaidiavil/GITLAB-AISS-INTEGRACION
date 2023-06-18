@@ -20,9 +20,9 @@ public class GitLabService {
     private final String url_post = "http://localhost:8080/gitminer/projects";
     private final String token = "glpat-cbavaBZ6sJznUq8CP-oF";
 
-    public List<Comment> getIssueComments(String id, String ref_id, Integer maxPages){
+    public List<Comment> getIssueComments(String id, String iid, Integer maxPages){
 
-        String uri = "https://gitlab.com/api/v4/projects/" + id + "/issues/" + ref_id + "/notes?per_page=" + maxPages;
+        String uri = "https://gitlab.com/api/v4/projects/" + id + "/issues/" + iid + "/notes?per_page=" + maxPages;
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);
@@ -55,7 +55,7 @@ public class GitLabService {
 
         for(Issue i: response){
 
-            i.setComments(getIssueComments(id,i.getRefId(),maxPages));
+            i.setComments(getIssueComments(id,i.getIid(),maxPages));
 
         }
 

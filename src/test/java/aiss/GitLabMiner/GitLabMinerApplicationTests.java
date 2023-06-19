@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 class GitLabMinerApplicationTests {
@@ -23,8 +23,8 @@ class GitLabMinerApplicationTests {
 	@DisplayName("Get all projects")
 	void findAllProjects() {
 		List<Project> users = gitLabService.getProjects();
-		assertTrue(!users.isEmpty(), "The list of projects is empty!!");
-		users.stream().forEach(el -> System.out.println(el));
+		assertFalse(users.isEmpty(), "The list of projects is empty!!");
+		users.forEach(System.out::println);
 	}
 	@Test
 	@DisplayName("Get Project")

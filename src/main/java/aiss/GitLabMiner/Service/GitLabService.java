@@ -1,14 +1,12 @@
 package aiss.GitLabMiner.service;
 
 import aiss.GitLabMiner.model.*;
-import aiss.GitLabMiner.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,7 +15,6 @@ public class GitLabService {
 
     @Autowired
     RestTemplate restTemplate;
-    private final String url_post = "http://localhost:8080/gitminer/projects";
     private final String token = "glpat-cbavaBZ6sJznUq8CP-oF";
 
     public List<Comment> getIssueComments(String id, String iid, Integer maxPages){
@@ -28,10 +25,11 @@ public class GitLabService {
         headers.set("Authorization", "Bearer " + token);
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<Comment> entity = new HttpEntity<Comment>(null, headers);
+        HttpEntity<Comment> entity = new HttpEntity<>(null, headers);
         ResponseEntity<Comment[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, Comment[].class);
         Comment[] comments = response.getBody();
 
+        assert comments != null;
         return Arrays.asList(comments);
     }
 
@@ -40,10 +38,16 @@ public class GitLabService {
         String fecha = LocalDate.now().minusDays(sinceCommits).toString();
         String uri = "https://gitlab.com/api/v4/projects/" + id + "/repository/commits?since=" + fecha +"&per_page=" + maxPages;
 
-        Commit[] response = restTemplate.getForObject(uri, Commit[].class);
-        List<Commit> commits= Arrays.asList(response);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        return commits;
+        HttpEntity<Commit> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<Commit[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, Commit[].class);
+        Commit[] commits = response.getBody();
+
+        assert commits != null;
+        return Arrays.asList(commits);
     }
 
     public List<Issue> getIssues(String id, Integer sinceIssues, Integer maxPages) {
@@ -51,15 +55,22 @@ public class GitLabService {
         String fecha = LocalDate.now().minusDays(sinceIssues).toString();
         String uri = "https://gitlab.com/api/v4/projects/" + id + "/issues?updated_before="+fecha+"&per_page=" + maxPages;
 
-        Issue[] response = restTemplate.getForObject(uri, Issue[].class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        for(Issue i: response){
+        HttpEntity<Issue> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<Issue[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, Issue[].class);
+        Issue[] issues = response.getBody();
+
+        assert issues != null;
+        for(Issue i: issues){
 
             i.setComments(getIssueComments(id,i.getIid(),maxPages));
 
         }
 
-        return Arrays.asList(response);
+        return Arrays.asList(issues);
     }
 
     public Project getProject(String id, Integer sinceCommits,Integer sinceIssues,Integer maxPages){
@@ -72,8 +83,9 @@ public class GitLabService {
 
         HttpEntity<String> entity = new HttpEntity<>(url,headers);
         ResponseEntity<Project> response = restTemplate.exchange(url, HttpMethod.GET, entity, Project.class);
-
         Project project = response.getBody();
+
+        assert project != null;
         project.setCommits(getCommits(id,sinceCommits,maxPages));
         project.setIssues(getIssues(id,sinceIssues,maxPages));
 
@@ -82,15 +94,22 @@ public class GitLabService {
 
     public List<Project> getProjects(){
         String uri = "https://gitlab.com/api/v4/projects/";
-        Project[] response = restTemplate.getForObject(uri, Project[].class);
 
-        return Arrays.asList(response);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Project> entity = new HttpEntity<>(null, headers);
+        ResponseEntity<Project[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, Project[].class);
+        Project[] projects = response.getBody();
+
+        assert projects != null;
+        return Arrays.asList(projects);
     }
 
     public Project postProject(Project project) {
-        String url = url_post;
-        Project response = restTemplate.postForObject(url, project, Project.class);
+        String url_post = "http://localhost:8080/gitminer/projects";
 
-        return response;
+        return restTemplate.postForObject(url_post, project, Project.class);
     }
 }

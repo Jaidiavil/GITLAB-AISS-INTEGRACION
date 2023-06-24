@@ -29,7 +29,6 @@ public class GitLabService {
         ResponseEntity<Comment[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, Comment[].class);
         Comment[] comments = response.getBody();
 
-        assert comments != null;
         return Arrays.asList(comments);
     }
 
@@ -46,7 +45,6 @@ public class GitLabService {
         ResponseEntity<Commit[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, Commit[].class);
         Commit[] commits = response.getBody();
 
-        assert commits != null;
         return Arrays.asList(commits);
     }
 
@@ -63,7 +61,6 @@ public class GitLabService {
         ResponseEntity<Issue[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, Issue[].class);
         Issue[] issues = response.getBody();
 
-        assert issues != null;
         for(Issue i: issues){
 
             i.setComments(getIssueComments(id,i.getIid(),maxPages));
@@ -85,7 +82,7 @@ public class GitLabService {
         ResponseEntity<Project> response = restTemplate.exchange(url, HttpMethod.GET, entity, Project.class);
         Project project = response.getBody();
 
-        assert project != null;
+
         project.setCommits(getCommits(id,sinceCommits,maxPages));
         project.setIssues(getIssues(id,sinceIssues,maxPages));
 
@@ -103,7 +100,6 @@ public class GitLabService {
         ResponseEntity<Project[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, Project[].class);
         Project[] projects = response.getBody();
 
-        assert projects != null;
         return Arrays.asList(projects);
     }
 

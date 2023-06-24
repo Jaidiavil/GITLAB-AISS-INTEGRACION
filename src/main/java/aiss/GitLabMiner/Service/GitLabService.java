@@ -1,4 +1,4 @@
-package aiss.GitLabMiner.service;
+package aiss.GitLabMiner.Service;
 
 import aiss.GitLabMiner.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,7 +108,7 @@ public class GitLabService {
     }
 
     public Project postProject(Project project) {
-        String url_post = "http://localhost:8080/gitminer/projects";
+        String url_post = "http://localhost:8080/gitminer";
 
         return restTemplate.postForObject(url_post, project, Project.class);
     }

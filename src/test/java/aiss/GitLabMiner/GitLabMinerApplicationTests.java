@@ -29,7 +29,7 @@ class GitLabMinerApplicationTests {
 	}
 	@Test
 	@DisplayName("Get Project")
-	void findAProjectById() throws NotFoundExcept {
+	void findAProjectById() {
 		String id = "21501483";
 		Integer sinceCommits = 3;
 		Integer sinceIssues = 20;
@@ -40,7 +40,7 @@ class GitLabMinerApplicationTests {
 	}
 	@Test
 	@DisplayName("Get Commits")
-	void findCommitsById() throws NotFoundExcept {
+	void findCommitsById() {
 		String id = "21501483";
 		Integer sinceCommits = 3;
 		Integer maxPages = 2;
@@ -50,7 +50,7 @@ class GitLabMinerApplicationTests {
 	}
 	@Test
 	@DisplayName("Get Issues")
-	void findIssuesById() throws NotFoundExcept {
+	void findIssuesById(){
 		String id = "21501483";
 		Integer sinceIssues = 20;
 		Integer maxPages = 2;

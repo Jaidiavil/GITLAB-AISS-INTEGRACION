@@ -1,6 +1,5 @@
 package aiss.GitLabMiner;
 
-import aiss.GitLabMiner.exception.NotFoundExcept;
 import aiss.GitLabMiner.model.Commit;
 import aiss.GitLabMiner.model.Issue;
 import aiss.GitLabMiner.model.Project;

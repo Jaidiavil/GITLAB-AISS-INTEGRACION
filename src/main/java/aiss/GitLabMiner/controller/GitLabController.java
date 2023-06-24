@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.*;
 import aiss.GitLabMiner.service.GitLabService;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 
@@ -30,7 +31,13 @@ public class GitLabController {
                            @RequestParam(defaultValue = "20") Integer sinceIssues,
                            @RequestParam(defaultValue = "2") Integer maxPages) {
 
-        return gitLabService.getProject(id,sinceCommits,sinceIssues,maxPages);
+        Project project = gitLabService.getProject(id, sinceCommits, sinceIssues, maxPages);
+
+        if (project == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found");
+        } else {
+            return project;
+        }
     }
 
     @PostMapping("/{id}")
@@ -41,7 +48,11 @@ public class GitLabController {
                                  @RequestParam(defaultValue = "2") Integer maxPages) {
 
         Project project = gitLabService.getProject(id,sinceCommits,sinceIssues,maxPages);
-        return gitLabService.postProject(project);
+        if (project == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found");
+        } else {
+            return gitLabService.postProject(project);
+        }
     }
 
 }

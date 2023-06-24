@@ -1,5 +1,6 @@
 package aiss.GitLabMiner;
 
+import aiss.GitLabMiner.exception.NotFoundExcept;
 import aiss.GitLabMiner.model.Commit;
 import aiss.GitLabMiner.model.Issue;
 import aiss.GitLabMiner.model.Project;
@@ -28,7 +29,7 @@ class GitLabMinerApplicationTests {
 	}
 	@Test
 	@DisplayName("Get Project")
-	void findAProjectById() {
+	void findAProjectById() throws NotFoundExcept {
 		String id = "21501483";
 		Integer sinceCommits = 3;
 		Integer sinceIssues = 20;
@@ -39,7 +40,7 @@ class GitLabMinerApplicationTests {
 	}
 	@Test
 	@DisplayName("Get Commits")
-	void findCommitsById() {
+	void findCommitsById() throws NotFoundExcept {
 		String id = "21501483";
 		Integer sinceCommits = 3;
 		Integer maxPages = 2;
@@ -49,7 +50,7 @@ class GitLabMinerApplicationTests {
 	}
 	@Test
 	@DisplayName("Get Issues")
-	void findIssuesById() {
+	void findIssuesById() throws NotFoundExcept {
 		String id = "21501483";
 		Integer sinceIssues = 20;
 		Integer maxPages = 2;

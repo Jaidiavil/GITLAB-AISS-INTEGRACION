@@ -3,7 +3,7 @@ package aiss.GitLabMiner;
 import aiss.GitLabMiner.model.Commit;
 import aiss.GitLabMiner.model.Issue;
 import aiss.GitLabMiner.model.Project;
-import aiss.GitLabMiner.service.GitLabService;
+import aiss.GitLabMiner.Service.GitLabService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

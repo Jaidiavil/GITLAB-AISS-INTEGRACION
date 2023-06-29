@@ -48,11 +48,9 @@ public class GitLabController {
                                  @RequestParam(defaultValue = "2") Integer maxPages) {
 
         Project project = gitLabService.getProject(id,sinceCommits,sinceIssues,maxPages);
-        if (project == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found");
-        } else {
-            return gitLabService.postProject(project);
-        }
+
+        return gitLabService.postProject(project);
+
     }
 
 }

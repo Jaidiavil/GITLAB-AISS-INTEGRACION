@@ -136,13 +136,8 @@ public class GitLabService {
     public Project postProject(Project project) {
         String url_post = "http://localhost:8080/gitminer";
 
-        Project response;
-        try {
-            response = restTemplate.postForObject(url_post, project, Project.class);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Not found");
-        }
+        return restTemplate.postForObject(url_post, project, Project.class);
 
-        return response;
+
     }
 }
